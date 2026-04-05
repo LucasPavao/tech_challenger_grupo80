@@ -66,3 +66,23 @@ docker compose down
 ```
 
 If you'd like, I can also add a small `env.example` file to the repo, or verify that the `Dockerfile` exposes and uses the `SERVER_PORT` environment variable—tell me which you'd prefer next.
+
+4) To reset the database, you can stop the containers and remove the volume:
+
+```bash
+docker compose down -v
+```
+
+- Or run the following command to remove just the volume:
+
+```bash
+docker volume ls
+docker volume rm <volume-name>
+```
+
+- You may need to delete the containers:
+
+```bash
+docker ps -a
+docker rm <container_id>
+```
