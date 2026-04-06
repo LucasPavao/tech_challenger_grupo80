@@ -1,5 +1,6 @@
 package br.com.tech.challenger.api_restaurante.entity;
 
+import br.com.tech.challenger.api_restaurante.enums.TipoUsuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,17 +25,18 @@ public class Usuario {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
     private String login;
 
-    @Column(nullable = false)
     private String senha;
 
-    @Column(nullable = false)
     private String endereco;
 
     @Column(name = "data_ultima_alteracao")
     private LocalDateTime dataUltimaAlteracao;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_usuario", nullable = false)
+    private TipoUsuario tipoUsuario;
 
     @PreUpdate
     protected void onUpdate() {
