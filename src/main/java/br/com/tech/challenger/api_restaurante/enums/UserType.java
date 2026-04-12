@@ -3,8 +3,8 @@ package br.com.tech.challenger.api_restaurante.enums;
 import lombok.Getter;
 
 @Getter
-public enum TipoUsuario {
+public enum UserType {
 
-    CLIENTE,
-    DONO_RESTAURANTE;
+    CUSTOMER,
+    RESTAURANT_OWNER;
 }

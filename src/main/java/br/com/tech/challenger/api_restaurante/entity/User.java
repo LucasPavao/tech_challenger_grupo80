@@ -1,6 +1,6 @@
 package br.com.tech.challenger.api_restaurante.entity;
 
-import br.com.tech.challenger.api_restaurante.enums.TipoUsuario;
+import br.com.tech.challenger.api_restaurante.enums.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,38 +9,39 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String nome;
+    private String name;
 
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false, unique = true)
     private String login;
 
-    private String senha;
+    private String password;
 
-    private String endereco;
+    private String address;
 
-    @Column(name = "data_ultima_alteracao")
-    private LocalDateTime dataUltimaAlteracao;
+    @Column(name = "last_modified_date")
+    private LocalDateTime lastModifiedDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_usuario", nullable = false)
-    private TipoUsuario tipoUsuario;
+    @Column(name = "user_type", nullable = false)
+    private UserType userType;
 
     @PreUpdate
     protected void onUpdate() {
-        dataUltimaAlteracao = LocalDateTime.now();
+        lastModifiedDate = LocalDateTime.now();
     }
 }
 
