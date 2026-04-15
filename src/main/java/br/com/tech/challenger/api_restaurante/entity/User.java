@@ -28,8 +28,10 @@ public class User {
     @Column(nullable = false, unique = true)
     private String login;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column (nullable = false)
     private String address;
 
     @Column(name = "last_modified_date")
@@ -38,6 +40,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type", nullable = false)
     private UserType userType;
+
+    @PrePersist
+    protected void onCreate() {
+        lastModifiedDate = LocalDateTime.now();
+    }
 
     @PreUpdate
     protected void onUpdate() {
