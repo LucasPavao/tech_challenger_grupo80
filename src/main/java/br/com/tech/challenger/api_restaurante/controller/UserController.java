@@ -1,5 +1,6 @@
 package br.com.tech.challenger.api_restaurante.controller;
 
+import br.com.tech.challenger.api_restaurante.dto.UpdatePasswordRequestDTO;
 import br.com.tech.challenger.api_restaurante.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,11 @@ public class UserController {
         return ResponseEntity.ok(userService.findById(id));
     }
 
+    @GetMapping("/{name}")
+    public ResponseEntity<List<UserResponseDTO>> findByName(@PathVariable String name) {
+        return ResponseEntity.ok(userService.findByName(name));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> update(@PathVariable Long id,
                                                   @RequestBody @Valid UserRequestDTO dto) {
@@ -43,5 +49,13 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/password/update")
+    public ResponseEntity<Void> updatePassword(@PathVariable Long id,
+                                               @RequestBody @Valid UpdatePasswordRequestDTO dto) {
+        userService.updatePassword(id, dto);
+        return ResponseEntity.ok().build();
+
     }
 }

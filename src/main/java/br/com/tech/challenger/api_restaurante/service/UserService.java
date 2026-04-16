@@ -1,5 +1,6 @@
 package br.com.tech.challenger.api_restaurante.service;
 
+import br.com.tech.challenger.api_restaurante.dto.UpdatePasswordRequestDTO;
 import br.com.tech.challenger.api_restaurante.dto.UserRequestDTO;
 import br.com.tech.challenger.api_restaurante.dto.UserResponseDTO;
 import br.com.tech.challenger.api_restaurante.entity.User;
@@ -47,6 +48,13 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado: " + id));
     }
 
+    public List<UserResponseDTO> findByName(String name) {
+         return userRepository.findByName(name)
+                .stream()
+                .map(UserResponseDTO::fromEntity)
+                .toList();
+    }
+
     public UserResponseDTO update(Long id, UserRequestDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado: " + id));
@@ -54,7 +62,6 @@ public class UserService {
         user.setName(dto.name());
         user.setEmail(dto.email());
         user.setLogin(dto.login());
-        user.setPassword(dto.password());
         user.setAddress(dto.address());
         user.setUserType(dto.userType());
 
@@ -66,5 +73,14 @@ public class UserService {
             throw new IllegalArgumentException("Usuário não encontrado: " + id);
         }
         userRepository.deleteById(id);
+    }
+
+    public void updatePassword(Long id, UpdatePasswordRequestDTO dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado: " + id));
+
+        user.setPassword(dto.newPassword());
+
+        UserResponseDTO.fromEntity(userRepository.save(user));
     }
 }
