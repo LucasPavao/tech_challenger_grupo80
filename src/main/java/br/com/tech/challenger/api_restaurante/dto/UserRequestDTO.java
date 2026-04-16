@@ -20,8 +20,8 @@ public record UserRequestDTO(
         @NotBlank(message = "Senha é obrigatória")
         String password,
 
-        String address,
-
         @NotNull(message = "Tipo de usuário é obrigatório")
-        UserType userType
+        UserType userType,
+
+        UserAddressRequestDTO address
 ) {}

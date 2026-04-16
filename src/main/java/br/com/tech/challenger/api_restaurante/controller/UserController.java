@@ -29,11 +29,6 @@ public class UserController {
         return ResponseEntity.ok(userService.findAll());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.findById(id));
-    }
-
     @GetMapping("/{name}")
     public ResponseEntity<List<UserResponseDTO>> findByName(@PathVariable String name) {
         return ResponseEntity.ok(userService.findByName(name));
@@ -56,6 +51,5 @@ public class UserController {
                                                @RequestBody @Valid UpdatePasswordRequestDTO dto) {
         userService.updatePassword(id, dto);
         return ResponseEntity.ok().build();
-
     }
 }

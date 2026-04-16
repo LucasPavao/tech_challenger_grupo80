@@ -31,15 +31,15 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column (nullable = false)
-    private String address;
-
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type", nullable = false)
     private UserType userType;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private UserAddress userAddress;
 
     @PrePersist
     protected void onCreate() {

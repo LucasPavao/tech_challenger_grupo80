@@ -10,7 +10,7 @@ public record UserResponseDTO(
         String name,
         String email,
         String login,
-        String address,
+        UserAddressResponseDTO address,
         UserType userType,
         LocalDateTime lastModifiedDate
 ) {
@@ -20,7 +20,7 @@ public record UserResponseDTO(
                 user.getName(),
                 user.getEmail(),
                 user.getLogin(),
-                user.getAddress(),
+                UserAddressResponseDTO.fromEntity(user.getUserAddress()),
                 user.getUserType(),
                 user.getLastModifiedDate()
         );
