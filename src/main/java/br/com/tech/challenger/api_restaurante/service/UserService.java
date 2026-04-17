@@ -53,7 +53,7 @@ public class UserService {
     }
 
     public List<UserResponseDTO> findByName(String name) {
-         return userRepository.findByName(name)
+         return userRepository.findByNameContainingIgnoreCase(name)
                 .stream()
                 .map(UserResponseDTO::fromEntity)
                 .toList();

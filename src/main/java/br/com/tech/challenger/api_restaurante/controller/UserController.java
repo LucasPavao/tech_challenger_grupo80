@@ -3,6 +3,7 @@ package br.com.tech.challenger.api_restaurante.controller;
 import br.com.tech.challenger.api_restaurante.dto.UpdatePasswordRequestDTO;
 import br.com.tech.challenger.api_restaurante.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +26,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> findAll() {
-        return ResponseEntity.ok(userService.findAll());
-    }
-
-    @GetMapping("/{name}")
-    public ResponseEntity<List<UserResponseDTO>> findByName(@PathVariable String name) {
+    public ResponseEntity<List<UserResponseDTO>> findByName(@PathParam("name") String name) {
         return ResponseEntity.ok(userService.findByName(name));
     }
 
