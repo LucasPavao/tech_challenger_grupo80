@@ -1,18 +1,18 @@
-package br.com.tech.challenger.api_restaurante.controller;
+package br.com.tech.challenger.api_restaurante.controller.v1;
 
 import br.com.tech.challenger.api_restaurante.service.UserAddressService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import br.com.tech.challenger.api_restaurante.annotation.ApiV1;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import br.com.tech.challenger.api_restaurante.dto.UserAddressRequestDTO;
-import br.com.tech.challenger.api_restaurante.dto.UserAddressResponseDTO;
+import br.com.tech.challenger.api_restaurante.dto.v1.UserAddressRequestDTO;
+import br.com.tech.challenger.api_restaurante.dto.v1.UserAddressResponseDTO;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/v1/addresses")
+@ApiV1("/addresses")
 @RequiredArgsConstructor
 public class UserAddressController {
 

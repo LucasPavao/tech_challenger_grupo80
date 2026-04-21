@@ -1,20 +1,20 @@
-package br.com.tech.challenger.api_restaurante.controller;
+package br.com.tech.challenger.api_restaurante.controller.v1;
 
-import br.com.tech.challenger.api_restaurante.dto.UpdatePasswordRequestDTO;
+import br.com.tech.challenger.api_restaurante.dto.v1.UpdatePasswordRequestDTO;
 import br.com.tech.challenger.api_restaurante.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
+import br.com.tech.challenger.api_restaurante.annotation.ApiV1;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import br.com.tech.challenger.api_restaurante.dto.UserRequestDTO;
-import br.com.tech.challenger.api_restaurante.dto.UserResponseDTO;
+import br.com.tech.challenger.api_restaurante.dto.v1.UserRequestDTO;
+import br.com.tech.challenger.api_restaurante.dto.v1.UserResponseDTO;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/v1/users")
+@ApiV1("/users")
 @RequiredArgsConstructor
 public class UserController {
 

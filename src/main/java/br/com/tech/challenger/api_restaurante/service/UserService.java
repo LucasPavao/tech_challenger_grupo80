@@ -1,8 +1,8 @@
 package br.com.tech.challenger.api_restaurante.service;
 
-import br.com.tech.challenger.api_restaurante.dto.UpdatePasswordRequestDTO;
-import br.com.tech.challenger.api_restaurante.dto.UserRequestDTO;
-import br.com.tech.challenger.api_restaurante.dto.UserResponseDTO;
+import br.com.tech.challenger.api_restaurante.dto.v1.UpdatePasswordRequestDTO;
+import br.com.tech.challenger.api_restaurante.dto.v1.UserRequestDTO;
+import br.com.tech.challenger.api_restaurante.dto.v1.UserResponseDTO;
 import br.com.tech.challenger.api_restaurante.entity.User;
 import br.com.tech.challenger.api_restaurante.entity.UserAddress;
 import br.com.tech.challenger.api_restaurante.repository.UserRepository;
