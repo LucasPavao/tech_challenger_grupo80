@@ -1,4 +1,4 @@
-package br.com.tech.challenger.api_restaurante.dto;
+package br.com.tech.challenger.api_restaurante.dto.v1;
 
 import br.com.tech.challenger.api_restaurante.entity.UserAddress;
 

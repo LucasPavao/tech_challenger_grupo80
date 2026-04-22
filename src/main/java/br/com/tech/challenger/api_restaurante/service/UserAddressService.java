@@ -1,7 +1,7 @@
 package br.com.tech.challenger.api_restaurante.service;
 
-import br.com.tech.challenger.api_restaurante.dto.UserAddressRequestDTO;
-import br.com.tech.challenger.api_restaurante.dto.UserAddressResponseDTO;
+import br.com.tech.challenger.api_restaurante.dto.v1.UserAddressRequestDTO;
+import br.com.tech.challenger.api_restaurante.dto.v1.UserAddressResponseDTO;
 import br.com.tech.challenger.api_restaurante.entity.UserAddress;
 import br.com.tech.challenger.api_restaurante.repository.UserAddressRepository;
 import lombok.RequiredArgsConstructor;
