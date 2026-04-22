@@ -47,6 +47,12 @@ public class AuthenticationService {
         );
     }
 
+    public AuthenticationTokenDetailsDTO refreshToken(AuthenticationRefreshTokenRequestDto dto){
+        Long userId = Long.valueOf(tokenService.validateToken(dto.refreshToken()));
+        UserResponseDTO userDto = userService.findById(userId).orElseThrow();
+        return tokenService.generateToken(userDto);
+    }
+
     private Authentication authenticate(AuthenticationRequestDTO dto) {
         var authenticationToken = new UsernamePasswordAuthenticationToken(dto.login(), dto.password());
         return authenticationManager.authenticate(authenticationToken);

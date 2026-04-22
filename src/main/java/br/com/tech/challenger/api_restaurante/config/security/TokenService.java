@@ -26,25 +26,47 @@ public class TokenService {
     @Value("${security.secret}")
     private String secret;
 
-    @Value("${security.expiration.time}")
-    private Integer expiration;
+    @Value("${security.expiration.minutes}")
+    private Integer expirationMinutes;
 
     public AuthenticationTokenDetailsDTO generateToken(UserResponseDTO userDto) {
+        return new AuthenticationTokenDetailsDTO(
+                generateAccessToken(userDto),
+                generateRefreshToken(userDto),
+                getExpirationDate(expirationMinutes)
+        );
+    }
+
+    private String generateAccessToken(UserResponseDTO userDto) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(this.secret.getBytes());
-            Instant expiresAt = this.getExpirationDate();
-            String token = JWT.create()
+            return JWT.create()
                     .withIssuer(this.issuer)
                     .withSubject(userDto.login())
-                    .withExpiresAt(expiresAt)
+                    .withExpiresAt(this.getExpirationDate(expirationMinutes))
                     .sign(algorithm);
-
-            return new AuthenticationTokenDetailsDTO(token, expiresAt);
-
         } catch (JWTCreationException exception) {
-            logger.error("Erro ao generar JWT: " + exception.getMessage());
-            throw new AccessTokenException("Erro ao generar JWT");
+            logger.error("Erro ao generar AccessToken: " + exception.getMessage());
+            throw new AccessTokenException("Erro ao generar AccessToken");
         }
+    }
+
+    private String generateRefreshToken(UserResponseDTO userDto) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(this.secret.getBytes());
+            return JWT.create()
+                    .withIssuer(this.issuer)
+                    .withSubject(userDto.id().toString())
+                    .withExpiresAt(this.getExpirationDate(expirationMinutes * 3))
+                    .sign(algorithm);
+        } catch (JWTCreationException exception) {
+            logger.error("Erro ao generar RefreshToken: " + exception.getMessage());
+            throw new AccessTokenException("Erro ao generar RefreshToken");
+        }
+    }
+
+    private Instant getExpirationDate(Integer minutesToExpire) {
+        return LocalDateTime.now().plusHours(minutesToExpire).toInstant(ZoneOffset.of("-03:00"));
     }
 
     public String validateToken(String token) {
@@ -59,9 +81,5 @@ public class TokenService {
             logger.error("Erro ao validar JWT: " + exception.getMessage());
             throw new AccessTokenException("Erro ao validar JWT");
         }
-    }
-
-    private Instant getExpirationDate() {
-        return LocalDateTime.now().plusHours(this.expiration).toInstant(ZoneOffset.of("-03:00"));
     }
 }

@@ -25,4 +25,9 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticatedUserResponseDTO> register(@RequestBody @Valid UserRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(dto));
     }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<AuthenticationTokenDetailsDTO> refreshToken(@RequestBody @Valid AuthenticationRefreshTokenRequestDto dto) {
+        return ResponseEntity.status((HttpStatus.OK)).body(authenticationService.refreshToken(dto));
+    }
 }

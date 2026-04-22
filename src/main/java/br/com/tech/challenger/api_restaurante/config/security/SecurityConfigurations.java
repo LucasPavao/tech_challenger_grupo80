@@ -28,7 +28,7 @@ public class SecurityConfigurations {
                 .cors(Customizer.withDefaults())
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(HttpMethod.POST, "/v1/auth/login", "/v1/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/v1/auth/**").permitAll()
                         // .requestMatchers(HttpMethod.POST, "/v1/menu/create").hasRole("ROLE_RESTAURANT_OWNER") // Access based on role example
                         .anyRequest().authenticated()
                 )

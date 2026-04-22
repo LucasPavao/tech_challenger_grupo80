@@ -65,6 +65,11 @@ public class UserService implements UserDetailsService {
                 .toList();
     }
 
+    public Optional<UserResponseDTO> findById(Long id) {
+        return userRepository.findById(id)
+                .map(UserResponseDTO::fromEntity);
+    }
+
     public Optional<UserResponseDTO> findByLogin(String login) {
         return userRepository.findByLogin(login)
                 .map(UserResponseDTO::fromEntity);

@@ -4,6 +4,7 @@ import java.time.Instant;
 
 public record AuthenticationTokenDetailsDTO(
         String accessToken,
+        String refreshToken,
         Instant expiresAt
 ) {
 }
