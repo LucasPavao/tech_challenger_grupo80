@@ -25,8 +25,7 @@ public class AuthenticationService {
         Authentication authentication = this.authenticate(dto);
 
         User user = (User) authentication.getPrincipal();
-        this.logger.info(user.toString());
-        AuthenticationTokenDetailsDTO tokenDetailsDTO = tokenService.generateToken(user);
+        AuthenticationTokenDetailsDTO tokenDetailsDTO = tokenService.generateToken(UserResponseDTO.fromEntity(user));
         return new AuthenticatedUserResponseDTO(
                 UserResponseDTO.fromEntity(user),
                 tokenDetailsDTO
@@ -41,7 +40,7 @@ public class AuthenticationService {
         ));
 
         User user = (User) authentication.getPrincipal();
-        AuthenticationTokenDetailsDTO tokenDetailsDTO = tokenService.generateToken(user);
+        AuthenticationTokenDetailsDTO tokenDetailsDTO = tokenService.generateToken(UserResponseDTO.fromEntity(user));
         return new AuthenticatedUserResponseDTO(
                 UserResponseDTO.fromEntity(user),
                 tokenDetailsDTO

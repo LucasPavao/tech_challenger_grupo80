@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -64,9 +65,25 @@ public class UserService implements UserDetailsService {
                 .toList();
     }
 
+    public Optional<UserResponseDTO> findByLogin(String login) {
+        return userRepository.findByLogin(login)
+                .map(UserResponseDTO::fromEntity);
+    }
+
+    public Optional<User> findEntityByLogin(String login) {
+        return userRepository.findByLogin(login);
+    }
+
     public UserResponseDTO update(Long id, UserRequestDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado: " + id));
+
+        if (!user.getEmail().equals(dto.email()) && userRepository.existsByEmail(dto.email())) {
+            throw new IllegalArgumentException("Email já cadastrado: " + dto.email());
+        }
+        if (!user.getLogin().equals(dto.login()) && userRepository.existsByLogin(dto.login())) {
+            throw new IllegalArgumentException("Login já cadastrado: " + dto.login());
+        }
 
         UserAddress address = user.getUserAddress();
         address.setCity(dto.address().city());
