@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @RestController
-@RequestMapping("/v1")
+@RequestMapping
 public @interface ApiV1 {
     @AliasFor(annotation = RequestMapping.class, attribute = "path")
     String[] value() default {};
