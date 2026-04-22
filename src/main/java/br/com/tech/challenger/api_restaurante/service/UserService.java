@@ -7,15 +7,20 @@ import br.com.tech.challenger.api_restaurante.entity.User;
 import br.com.tech.challenger.api_restaurante.entity.UserAddress;
 import br.com.tech.challenger.api_restaurante.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponseDTO create(UserRequestDTO dto) {
         if (userRepository.existsByEmail(dto.email())) {
@@ -38,7 +43,7 @@ public class UserService {
         user.setName(dto.name());
         user.setEmail(dto.email());
         user.setLogin(dto.login());
-        user.setPassword(dto.password());
+        user.setPassword(passwordEncoder.encode(dto.password()));
         user.setUserType(dto.userType());
         user.setUserAddress(address);
 
@@ -92,8 +97,13 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado: " + id));
 
-        user.setPassword(dto.newPassword());
+        user.setPassword(passwordEncoder.encode(dto.newPassword()));
 
         UserResponseDTO.fromEntity(userRepository.save(user));
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
     }
 }

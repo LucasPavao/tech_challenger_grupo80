@@ -1,5 +1,6 @@
 package br.com.tech.challenger.api_restaurante.exception;
 
+import jakarta.validation.UnexpectedTypeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.validation.FieldError;
@@ -12,6 +13,13 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(UnexpectedTypeException.class)
+    public ProblemDetail handleUnexpectedType(UnexpectedTypeException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Configuração de validação inválida");
+        pd.setTitle("Erro de Validação");
+        return pd;
+    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ProblemDetail handlerIllegalArgument(IllegalArgumentException ex) {

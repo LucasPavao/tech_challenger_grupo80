@@ -20,11 +20,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<UserResponseDTO> create(@RequestBody @Valid UserRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(dto));
-    }
-
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> findByName(@PathParam("name") String name) {
         return ResponseEntity.ok(userService.findByName(name));

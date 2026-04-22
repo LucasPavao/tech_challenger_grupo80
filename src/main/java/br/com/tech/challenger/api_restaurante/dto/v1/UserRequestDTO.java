@@ -1,6 +1,7 @@
 package br.com.tech.challenger.api_restaurante.dto.v1;
 
 import br.com.tech.challenger.api_restaurante.enums.UserType;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,5 +24,7 @@ public record UserRequestDTO(
         @NotNull(message = "Tipo de usuário é obrigatório")
         UserType userType,
 
+        @NotNull(message = "O usuário deve ser cadastrado com endereço")
+        @Valid
         UserAddressRequestDTO address
 ) {}
