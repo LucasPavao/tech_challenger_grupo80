@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,7 +50,7 @@ public class AuthenticationService {
 
     public AuthenticationTokenDetailsDTO refreshToken(AuthenticationRefreshTokenRequestDto dto){
         Long userId = Long.valueOf(tokenService.validateToken(dto.refreshToken()));
-        UserResponseDTO userDto = userService.findById(userId).orElseThrow();
+        UserResponseDTO userDto = userService.findById(userId).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
         return tokenService.generateToken(userDto);
     }
 

@@ -1,7 +1,7 @@
 package br.com.tech.challenger.api_restaurante.config.security;
 
 import br.com.tech.challenger.api_restaurante.entity.User;
-import br.com.tech.challenger.api_restaurante.service.UserService;
+import br.com.tech.challenger.api_restaurante.service.UserSecuryService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -19,7 +20,7 @@ import java.io.IOException;
 public class AccessTokenFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
-    private final UserService userService;
+    private final UserSecuryService userSecurityService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -27,7 +28,7 @@ public class AccessTokenFilter extends OncePerRequestFilter {
             String token = this.getToken(request);
             if(token != null) {
                 String userLogin = tokenService.validateToken(token);
-                User user = userService.findEntityByLogin(userLogin).orElseThrow();
+                User user = userSecurityService.findEntityByLogin(userLogin).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrato: " + userLogin));
 
                 var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);

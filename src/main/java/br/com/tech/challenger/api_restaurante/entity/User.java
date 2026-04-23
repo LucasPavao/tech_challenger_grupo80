@@ -58,12 +58,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(userType == UserType.RESTAURANT_OWNER) {
-            return List.of(
-                    new SimpleGrantedAuthority("ROLE_RESTAURANT_OWNER"),
-                    new SimpleGrantedAuthority("ROLE_CUSTOMER"));
-        }
-        return List.of(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
+        return userType.getRoles().stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
     }
 
     @Override
