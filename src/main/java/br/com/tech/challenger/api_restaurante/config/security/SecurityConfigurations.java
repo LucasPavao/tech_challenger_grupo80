@@ -29,6 +29,11 @@ public class SecurityConfigurations {
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(HttpMethod.POST, "/v1/auth/**").permitAll()
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         // .requestMatchers(HttpMethod.POST, "/v1/menu/create").hasRole("ROLE_RESTAURANT_OWNER") // Access based on role example
                         .anyRequest().authenticated()
                 )
