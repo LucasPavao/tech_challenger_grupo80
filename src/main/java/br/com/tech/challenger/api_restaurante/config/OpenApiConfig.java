@@ -19,7 +19,7 @@ public class OpenApiConfig {
     public OpenAPI apiInfo() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Restaurant API")
+                        .title("RestaurantHub API")
                         .description("REST API documentation for Tech Challenger")
                         .version("v1")
                         .contact(new Contact().name("Tech Challenger Group 80")))
