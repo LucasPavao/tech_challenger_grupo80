@@ -1,88 +1,122 @@
 # Tech Challenger - Grupo80
 
-A small Spring Boot REST API project for the FIAP tech challenger (group 80).
+A Spring Boot REST API project for the FIAP tech challenger (group 80).
 
-This repository contains a Java Spring Boot application built with Maven, configured to run with Docker and Docker Compose. It uses PostgreSQL as the primary database.
+## Tech Stack
 
-Tech stack
-- Java 21 
+- Java 21
 - Spring Boot
 - Maven
 - PostgreSQL
 - Docker / Docker Compose
 
-Running with Docker Compose
+---
 
-Prerequisites
-- Docker (https://docs.docker.com/get-docker/)
-- Docker Compose v2 or higher (often provided with modern Docker installs)
+## Environment Files
 
-1) Create a `.env` file in the project root with the required environment variables, based on `.env.example`. Example:
+| File | Purpose |
+|------|---------|
+| `.env` | Local development (app runs on host, DB runs in Docker) |
+| `.env.prod` | Full Docker deployment (app + DB both in containers) |
 
-```bash
-# .env (example)
-SERVER_PORT=8080
-POSTGRES_DB=techdb
-POSTGRES_USER=techuser
-POSTGRES_PASSWORD=techpass
-```
+> Never commit these files. Add them to `.gitignore` if not already there.
 
-2) Build and start the application and the database using Docker Compose:
+---
 
-```bash
-# build and start in foreground (shows logs)
-docker compose up --build
+## Running Locally (app on host, DB in Docker)
 
-# or run in detached mode
-docker compose up --build -d
-```
+Use this mode during active development for faster iteration.
 
-3) Verify the application is available. By default the compose file maps the container port to the host at the address 127.0.0.1 and the port defined in `SERVER_PORT`:
+**Prerequisites:** Docker, Java 21, Maven
 
-- URL: http://127.0.0.1:8080/ (replace 8080 with your `SERVER_PORT` value)
-
-Notes
-- The `docker-compose.yml` in this repo builds the application image from the `Dockerfile` at the project root. If you need to change the exposed port, update the `SERVER_PORT` in your `.env` and the application `application-docker.properties` if required.
-- PostgreSQL data is persisted using a Docker volume (`postgres-data`) defined in `docker-compose.yml`.
-- The compose configuration waits for PostgreSQL to become healthy before starting the app using a `depends_on` health check.
-
-Troubleshooting
-- If containers fail to start, view logs with:
+**1. Start only the database:**
 
 ```bash
-docker compose logs -f
+docker compose up -d postgres
 ```
 
-- To force a rebuild (ignore cache):
+**2. Run the application:**
 
 ```bash
-docker compose build --no-cache
+./mvnw spring-boot:run
 ```
 
-- To stop and remove containers, networks and volumes created by compose:
+The app reads `application.properties`, which uses `${VAR:default}` placeholders. It connects to `localhost:5432` by default — no need to export `.env` manually, but you can if you want to override any value:
+
+```bash
+export $(grep -v '^#' .env | xargs) && ./mvnw spring-boot:run
+```
+
+**3. Access the API:**
+
+```
+http://localhost:8080
+```
+
+---
+
+## Running with Docker Compose (full Docker)
+
+Use this mode to test the production-like setup locally or to deploy.
+
+**Prerequisites:** Docker, Docker Compose v2+
+
+**1. Build and start all services:**
+
+```bash
+docker compose -f docker-compose.prod.yml --env-file .env.prod up --build
+```
+
+To run in detached mode:
+
+```bash
+docker compose -f docker-compose.prod.yml --env-file .env.prod up --build -d
+```
+
+**2. Access the API:**
+
+```
+http://127.0.0.1:8080
+```
+
+---
+
+## Spring Profiles
+
+| Profile | Config file loaded | Activated by |
+|---------|-------------------|--------------|
+| default | `application.properties` | No profile set (local dev) |
+| docker | `application.properties` + `application-docker.properties` | `SPRING_PROFILES_ACTIVE=docker` in `.env.prod` |
+
+---
+
+## Troubleshooting
+
+**View logs:**
+
+```bash
+# local DB container
+docker compose logs -f postgres
+
+# full Docker setup
+docker compose -f docker-compose.prod.yml logs -f
+```
+
+**Force rebuild (ignore cache):**
+
+```bash
+docker compose -f docker-compose.prod.yml --env-file .env.prod build --no-cache
+```
+
+**Stop and remove containers:**
 
 ```bash
 docker compose down
+docker compose -f docker-compose.prod.yml down
 ```
 
-If you'd like, I can also add a small `env.example` file to the repo, or verify that the `Dockerfile` exposes and uses the `SERVER_PORT` environment variable—tell me which you'd prefer next.
-
-4) To reset the database, you can stop the containers and remove the volume:
+**Reset the database (removes all data):**
 
 ```bash
 docker compose down -v
-```
-
-- Or run the following command to remove just the volume:
-
-```bash
-docker volume ls
-docker volume rm <volume-name>
-```
-
-- You may need to delete the containers:
-
-```bash
-docker ps -a
-docker rm <container_id>
 ```

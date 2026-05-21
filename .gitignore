@@ -1,5 +1,6 @@
 ## Application ##
 .env
+.env.prod
 
 HELP.md
 target/
